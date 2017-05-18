@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Соревнование</h1>
+<ul>
+    <li><b> {{ tourney.title }} </b></li>
+    <li><b>Спорт:</b> {{ tourney.sport }}</li>
+    <li><b>Место:</b> {{ tourney.location }}</li>
+    <li><b>Участники:</b> {{ tourney.participants }}</li>
+    <li><b>Дата начала:</b> {{ tourney.date_start }}</li>
+    <li><b>Дата окончания:</b> {{ tourney.date_end }}</li>
+    <li><b>Дата заезда:</b> {{ tourney.date_in }}</li>
+    <li><b>Дата отъезда:</b> {{ tourney.date_out }}</li>
+    <li><b>Открытие:</b> {{ tourney.dt_opening }}</li>
+    <li><b>Закрытие:</b> {{ tourney.dt_closing }}</li>
+    <li><b>Закрытие по окончанию:</b> {{ tourney.closing_by_end }}</li>
+    <li><b>Время для всех:</b> {{ tourney.time_text|linebreaks }}</li>
+    <li><b>Время для медиков:</b> {{ tourney.time_vfd|linebreaks }}</li>
+    <li><b>Судейские:</b> {{ tourney.judje_sum }}</li>
+    <li><b>Наградная:</b> {{ tourney.reward_sum }}</li>
+    <li><b>Печатная:</b> {{ tourney.print_sum }}</li>
+    <li><b>Отв. орг.:</b> {{ tourney.resp_org }}</li>
+    <li><b>Отв. прав.:</b> {{ tourney.resp_gov }}</li>
+    <li><b>Отв. зам.:</b> {{ tourney.resp_zam }}</li>
+    <li><b>Отв. УСО:</b> {{ tourney.resp_uso }}</li>
+</ul>
+
+<a href="/sport/detail/{{ tourney.id }}/edit">Изменить</a>
+<br />
+
+{% endblock %}

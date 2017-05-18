@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<style>
+.form-list { padding: 2px; border: 1px solid black; }
+.form-list td { padding: 2px; padding-bottom: 6px; border: 1px solid black; }
+.form-dates input { width: 100px;}
+.form-sport select { width: 200px;}
+.form-time-text textarea { width: 160px; height: 120px}
+</style>
+{% endblock %}
+
+{% block breadcrumb %}
+
+{{ block.super}}
+{% if year %}- <a href="/sport/{{ year }}">{{ year }}</a>{% endif %}
+{% if month %}- <a href="/sport/{{ year }}/{{ month }}">{{ month }}</a>{% endif %}
+{% if week %}- Неделя <a href="/sport/{{ year }}/w{{ week }}">{{ week }}</a>{% endif %}
+{% if formset %}- Редактор{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Редактор</h1>
+
+<form method="post" action="">
+    {% csrf_token %}
+    {% if formset.errors %}{{ formset.errors }}{% endif %}
+    {{ formset.management_form }}
+    <input type="submit" value="Сохранить">
+    <table class="form-list">
+        <tr>
+            <td width=300px>Название</td>
+            <td>Даты
+            </td>
+            <td class="form-sport">Информация
+            </td>
+            <td class="form-time-text">Время для всех</td>
+            <td class="form-time-text">Время для медиков</td>
+            <td>Ответственные
+            </td>
+            
+        </tr>
+    {% for form in formset %}
+        <tr>
+        {{ form.id }}
+            <td width=300px>{{ form.title.value }} {{ form.title }}</td>
+            <td class="form-dates">Начало/окончание:
+                 <br />{{ form.date_start }}
+                 <br /> {{ form.date_end }}
+                 <br /> Въезд/выезд:
+                 <br /> {{ form.date_in }}
+                 <br /> {{ form.date_out }}
+            </td>
+            <td class="form-sport">{{ form.sport_display }} {{ form.sport }}
+                 <br />{{ form.loc_display }} {{ form.location }}
+                 <br /> {{ form.participants }}
+            </td>
+            <td class="form-time-text">{{ form.time_text}}</td>
+            <td class="form-time-text">{{ form.time_vfd}}</td>
+            <td>Орг/прав/зам/УСО
+                 <br />{{ form.resp_org }}
+                 <br /> {{ form.resp_gov }}
+                 <br /> {{ form.resp_zam }}
+                 <br /> {{ form.resp_uso }}
+            </td>
+            
+        </tr>
+    {% endfor %}
+    </table>
+    <input type="submit" value="Сохранить">
+</form>
+
+{% endblock %}
+
+{% block rightblock %}
+{% endblock %}
+
+{% block extra_footer %}
+ <script type="text/javascript">
+   $(document).ready(function(){  
+    sport_list = {{ sports_js|safe }};
+    $( "#id_form-0-sport_display" ).val(sport_list[$("#id_form-0-sport").val()].value);
+    $( "#id_form-0-sport_display" ).autocomplete({
+      source: sport_list,
+      selectFirst:true,
+      minLength:1,
+      select:function(event,ui) {
+        $("#id_form-0-sport").val(ui.item.id)
+      }
+    });
+       
+   });
+</script>
+{% endblock %}

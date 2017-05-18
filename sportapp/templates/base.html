@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Спорт</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<link rel="stylesheet" href="\static\jqueryui\jquery-ui.min.css " />
+<link rel="stylesheet" href="\static\jqueryui\jquery-ui.theme.css " />
+
+<style>
+#menu { padding: 20px; }
+#menu a { padding: 4px; }
+</style>
+
+
+{% block extra_head %}
+{% endblock %}
+</head>
+<body>
+{% block header %}
+<div id="menu" class="container">
+<div class="row">
+<div class="col-sm-12">
+<b>Спортбаза</b>
+<a href="/">Главная</a>
+</div>
+</div>
+</div>
+{% endblock %}
+
+<div id="content-wrapper" class="container">
+<div class="row">
+
+<div id ="content" class="col-sm-9">
+{% block breadcrumb %}
+<a href="/">Главная</a>
+{% endblock %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% block content %}
+
+{% endblock %}
+</div>
+<div class="col-sm-3">
+<h3>Меню</h3>
+{% block rightblock %}
+<h4>Логин:</h4>
+<ul>
+{% if request.user.is_authenticated %}
+<li>{{ request.user }}</li>
+<li><a href="/accounts/logout">Выход</a></li>
+{% else %}
+<li><a href="/accounts/login">Вход</a></li>
+{% endif %}
+</ul>
+
+{% if request.user.is_staff %}
+<h4>Админ:</h4>
+<ul>
+<li><a href="/admin/">Админка</a></li>
+{% if request.user.is_superuser %}
+<li><a href="/sport/upload/">Загрузить</a></li>
+{% endif %}
+</ul>
+{% endif %}
+<h4>Планы:</h4>
+<ul>
+<li><a href="/sport/2017/"><b>2017</b></a></li>
+<li><a href="/sport/2017/01/">январь</a></li>
+<li><a href="/sport/2017/02/">февраль</a></li>
+<li><a href="/sport/2017/03/">март</a></li>
+<li><a href="/sport/2017/04/">апрель</a></li>
+<li><a href="/sport/2017/05/">май</a></li>
+<li><a href="/sport/2017/06/">июнь</a></li>
+<li><a href="/sport/2017/07/">июль</a></li>
+<li><a href="/sport/2017/08/">август</a></li>
+<li><a href="/sport/2017/09/">сентябрь</a></li>
+<li><a href="/sport/2017/10/">октябрь</a></li>
+<li><a href="/sport/2017/11/">ноябрь</a></li>
+<li><a href="/sport/2017/12/">декабрь</a></li>
+</ul>
+{% endblock %}
+</div>
+
+</div>
+</div>
+
+<div class="container" id="footer">
+{% block footer %}
+<div style="padding: 20px;">
+<p style="text-align:center;">(c) Министерство спорта Республики Марий Эл</p>
+</div>
+{% endblock %}
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    
+<script src="\static\jqueryui\jquery-ui.min.js " ></script>
+    
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+{% block extra_footer %}
+{% endblock %}
+
+</body>
+</html>

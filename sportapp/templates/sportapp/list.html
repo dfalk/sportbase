@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<style>
+.form-list { padding: 2px; border: 1px solid gray; margin-bottom: 10px; }
+.form-list td { padding: 4px; padding-bottom: 6px; border: 1px solid #bbbbbb; }
+</style>
+{% endblock %}
+
+{% block breadcrumb %}
+{{ block.super }}
+{% if year %}- <a href="/sport/{{ year }}">{{ year }}</a>{% endif %}
+{% if month %}- <a href="/sport/{{ year }}/{{ month }}">{{ month }}</a>{% endif %}
+{% if week %}- Неделя <a href="/sport/{{ year }}/w{{ week }}">{{ week }}</a>{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<h1>Соревнования</h1>
+
+{% if weeks %}
+<b>Недели в этом месяце: </b>
+<ul>
+{% for week in weeks %}
+<li><a href="/sport/2017/w{{ week}}/">{{ week}}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if week == None and month == None %}
+<p>Месяцы: 
+{% for month in '0123456789ab'|make_list %}
+    
+    <a href="/sport/2017/{% if forloop.counter < 10 %}0{% endif %}{{ forloop.counter }}">{{ forloop.counter }}</a>
+{% endfor %}
+</p>
+{% endif %}
+
+<p> <b>Список соревнований{% if week %} - неделя {{week}}{% endif %}: </b></p>
+<table class="form-list">
+{% for tourney in tourney_list %}
+<tr>
+    <td style="width: 130px"><b>{{ tourney.date_start }}</b>{% if tourney.date_end and tourney.date_start != tourney.date_end %}<br/>- {{ tourney.date_end}}{% endif %}</td>
+    <td><a href="/sport/detail/{{ tourney.id }}">{{ tourney }}</a></td>
+</tr>
+{% endfor %}
+</table>
+
+{% if perms.sportapp.change_tourney %}
+{% if month %}<p> Управление: <a href="/sport/{{ year }}/{{ month }}/edit">Редактор</a></p>{% endif %}
+{% if week %}<p>Управление: <a href="/sport/{{ year }}/w{{ week }}/edit">Редактор</a></p>{% endif %}
+{% endif %}
+
+{% if week %}<a href="/sport/2017/w{{ prev_week}}/">&lt;-- Предыдущая</a> ... <a href="/sport/2017/w{{ next_week}}/">Следующая --&gt;</a>{% endif %}
+
+{% if month or week %}
+<h3>Файл по форме</h3>
+<ul>
+<li><a href="?file=gov">для правительства</a></li>
+<li>для министерства</li>
+<li>для медиков</li>
+</ul>
+{% endif %}
+
+{% endblock %}

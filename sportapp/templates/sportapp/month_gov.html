@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Соревнования</h1>
+
+<h2>ПЛАН<br/>
+Физкультурных мероприятий и спортивных мероприятий, проводимых Министерством спорта Республики Марий Эл
+</h2>
+<h3>месяц</h3>
+
+<table border=1 width=900px>
+<tr>
+    <td style="width:100px">Дата проведения</td>
+	<td style="width:300px">Точное название мероприятия, тема</td>
+	<td style="width:200px">Время, место проведения</td>
+	<td style="width:200px">Ответственный за проведение мероприятия</td>
+	<td style="width:100px">Согласованное участие в мероприятиях</td>
+</tr>
+</table>
+
+<br/>
+
+<table border=1 width=900px>
+<tr>
+    <td style="width:100px">1</td>
+	<td style="width:300px">2</td>
+	<td style="width:200px">3</td>
+	<td style="width:200px">4</td>
+	<td style="width:100px">5</td>
+</tr>
+<tr>
+{% for tourney in tourney_list %}
+    <td>{{ tourney.date_start }} {% if tourney.date_end %} - {{ tourney.date_end }}{% endif %} </td>
+	<td>{{ tourney }}</td>
+	<td><b>{{ tourney.time_text }}</b><br/>{{ tourney.location.city }}<br/>{{ tourney.location.title }}</td>
+	<td>{{ tourney.resp_zam }}</td>
+	<td>&nbsp;</td>
+{% endfor %}
+</tr>
+</table>
+
+{% endblock %}

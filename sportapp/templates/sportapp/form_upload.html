@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form enctype="multipart/form-data" method="post" action="/sport/upload/">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Go" />
+</form>
+
+{{ file }}
+
+<table>
+{% for row in doc.tables.2.rows %}
+<tr>
+{% for cell in row.cells %}
+    <td>{{ cell.text }}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

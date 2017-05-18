@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Соревнования</h1>
+
+<p><b>Недели в этом месяце: </b>{% for week in weeks %}
+<a href="/sport/2017/w{{ week}}/">{{ week }}</a>{% if week == current_week %}*{% endif %}
+{% endfor %}
+</p>
+
+<p><b>На этой неделе:</b></p>
+<ul>
+{% for tourney in tourney_list %}
+    <li><a href="/sport/detail/{{ tourney.id }}">{{ tourney.date_start }} - {{ tourney }}</a></li>
+{% endfor %}
+</ul>
+{% if perms.sportapp.change_tourney %}
+{% if current_week %}<p>Управление: <a href="/sport/2017/w{{ current_week }}/edit">Редактор</a></p>{% endif %}
+{% endif %}
+<a href="/sport/2017/w{{ prev_week}}/">&lt;-- Предыдущая</a> ... <a href="/sport/2017/w{{ next_week}}/">Следующая --&gt;</a>
+
+<h3>Файл по форме</h3>
+<ul>
+<li>для правительства</li>
+<li>для министерства</li>
+<li>для медиков</li>
+</ul>
+
+{% endblock %}

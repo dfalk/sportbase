@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+
+{{ block.super}}
+{% if year %}- <a href="/sport/{{ year }}">{{ year }}</a>{% endif %}
+{% if month %}- <a href="/sport/{{ year }}/{{ month }}">{{ month }}</a>{% endif %}
+{% if week %}- Неделя <a href="/sport/{{ year }}/w{{ week }}">{{ week }}</a>{% endif %}
+{% if form %}- Редактор{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Редактор</h1>
+
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Сохранить">
+</form>
+
+{% endblock %}
+
+{% block rightblock %}
+{% endblock %}
+
+{% block extra_footer %}
+
+{% endblock %}

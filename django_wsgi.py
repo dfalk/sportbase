@@ -9,9 +9,9 @@ import sys
 # Если вы получаете ошибку 500 Internal Server Error,
 # скорее всего проблема именно в путях поиска.
 
-sys.path.insert(0, '/home/dfalk/projects/sportbase/lib/python2.7/site-packages')
 sys.path.insert(0, '/home/dfalk/projects/sportbase/app/sportpro')
 sys.path.insert(0, '/home/dfalk/projects/sportbase/app/')
+sys.path.insert(0, '/home/dfalk/projects/sportbase/lib/python2.7/site-packages')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

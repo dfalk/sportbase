@@ -91,6 +91,56 @@ def list_view(request, year=None, month=None, week=None):
         response['Content-Length'] = length
         return response
     # /end export block
+    # export block
+    if request.GET.get('file', '') == 'vfd':
+        file_name = "sportapp/templates/sportapp/03-vfd_week.docx"
+        #file_out = "sportapp/templates/sportapp/02-gov_month-out.docx"
+        doc1 = Document(file_name)
+        for tourney in tourney_list:
+            row1 = doc1.tables[2].add_row()
+            str_date = unicode(localize(tourney.date_start)).split(" ")
+            run11 = row1.cells[0].paragraphs[0].add_run(str_date[0] + " " + str_date[1])
+            run11.bold = True
+            run11.italic = True
+            if tourney.date_end and tourney.date_end != tourney.date_start:
+                end_date = unicode(localize(tourney.date_end)).split(" ")
+                p11b = row1.cells[0].add_paragraph()
+                p11b.alignment = align.CENTER
+                run11b = p11b.add_run(" - " + end_date[0] + " " + end_date[1])
+                run11b.bold = True
+                run11b.italic = True
+            row1.cells[0].paragraphs[0].alignment = align.CENTER
+            row1.cells[1].paragraphs[0].text = tourney.title
+            run21 = row1.cells[2].paragraphs[0].add_run(tourney.time_vfd)
+            run21.bold = True
+            row1.cells[2].paragraphs[0].alignment = align.CENTER
+            p22 = row1.cells[2].add_paragraph(unicode(tourney.location))
+            p22.alignment = align.CENTER
+            if tourney.resp_org != None:
+                run31 = row1.cells[3].paragraphs[0].add_run(unicode(tourney.resp_org))
+                run31.bold = True
+                row1.cells[3].paragraphs[0].alignment = align.CENTER
+        for row in doc1.tables[2].rows:
+            for cell in row.cells:
+                paragraphs = cell.paragraphs
+                for paragraph in paragraphs:
+                    for run in paragraph.runs:
+                        font = run.font
+                        font.size= Pt(12)
+        #doc1.save(file_out)
+        f = StringIO()
+        docx_title = "vfd_week_" + str(select_week) + ".docx"
+        doc1.save(f)
+        length = f.tell()
+        f.seek(0)
+        response = HttpResponse(
+            f.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+        response['Content-Disposition'] = 'attachment; filename=' + docx_title
+        response['Content-Length'] = length
+        return response
+    # /end export block
     context = {'tourney_list': tourney_list,
                'year': year, 'month': month, 'week': week,
                'weeks': weeks,

@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^(?P<year>\d{4})/w(?P<week>\d{2})', views.list_view, name='list_week'),
     url(r'^(?P<year>\d{4})', views.list_view, name='list_year'),
     url(r'^upload/$', views.upload, name='upload'),
+    url(r'^sport_list', views.sport_list, name='sport_list'),
     #url(r'^month_gov/$', views.month_gov, name='month_gov'),
     #url(r'^edit/$', views.edit, name='edit'),
 ]

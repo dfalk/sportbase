@@ -145,7 +145,12 @@ def edit(request,  tourney_id):
     else:
         form = TourneyForm(instance=tourney)
     return render(request, 'sportapp/edit.html', {'form': form})
-    
+
+def sport_list(request):
+    sports = Sport.objects.all()
+    context = {'sports':sports}
+    return render(request, 'sportapp/sport_list.html', context)   
+
 def detail(request, tourney_id):
     tourney = Tourney.objects.get(id=tourney_id)
     context = {'tourney': tourney}

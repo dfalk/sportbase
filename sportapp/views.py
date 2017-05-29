@@ -196,10 +196,27 @@ def edit(request,  tourney_id):
         form = TourneyForm(instance=tourney)
     return render(request, 'sportapp/edit.html', {'form': form})
 
+def sport_loc(request):
+    location = Location.objects.all()
+    context = {'location':location}
+    return render(request, 'sportapp/sport_loc.html', context)
+
+def sport_loc_detail(request, id):
+    location = Location.objects.get(id=id)
+    tourney_loc = Tourney.objects.filter(location=location)
+    context = {'location':location, 'tourney':tourney_loc}
+    return render(request, 'sportapp/sport_loc_detail.html', context)
+
 def sport_list(request):
     sports = Sport.objects.all()
     context = {'sports':sports}
     return render(request, 'sportapp/sport_list.html', context)   
+
+def sport_detail(request, id):
+    sport = Sport.objects.get(id=id) 
+    tourney_list = Tourney.objects.filter(sport=sport)
+    context = {'sport': sport, 'tourney_list':tourney_list}
+    return render(request, 'sportapp/sport_detail.html', context)
 
 def detail(request, tourney_id):
     tourney = Tourney.objects.get(id=tourney_id)

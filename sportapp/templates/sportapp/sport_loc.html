@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Места проведения</h1>
+<ul>
+{% for location in location %}
+   <li><a href="/sport/loc/{{ location.id }}">{{ location  }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -9,29 +9,35 @@ from django.conf import settings
 from django.contrib.auth.decorators import permission_required
 from .models import Tourney, Sport, Location
 from .forms import UploadForm, TourneyFormSet, TourneyForm, LocForm, FilterForm
-from docx import Document
-from docx.enum.text import WD_ALIGN_PARAGRAPH as align
-from docx.shared import Pt
-from cStringIO import StringIO
-from datetime import datetime
+from .reports import export_gov, export_vfd, export_min
+from .utils import week_start_date
+from datetime import datetime, date, timedelta
 from django.utils import formats
 from django.utils.formats import localize
 import calendar
 import json
+
 
 def list_view(request, year=None, month=None, week=None):
     weeks = []
     dnow = datetime.now()
     current_week = dnow.isocalendar()[1]
     select_week = next_week = prev_week = None
+    custom_query = False
+    # set filter start/end
     if year:
-        tourney_list = Tourney.objects.filter(date_start__year=year)
+        year_int = int(year)
+        date_start = datetime(year_int, 1, 1)
+        date_end = datetime(year_int, 12, 31)
     if month:
         year_int = int(year)
         month_int = int(month)
-        tourney_list = tourney_list.filter(date_start__month=month)
-        first_week_month = datetime(year_int, month_int, 1).isocalendar()[1]
+        date_start = datetime(year_int, month_int, 1)
         last_month_day = calendar.monthrange(year_int, month_int)[1]
+        date_end = datetime(year_int, month_int, last_month_day)
+        first_week_month = datetime(year_int, month_int, 1).isocalendar()[1]
+        if month_int == 1:
+            first_week_month = 1
         last_week_month = datetime(year_int, month_int, last_month_day).isocalendar()[1]
         for week1 in range(first_week_month, last_week_month+1):
             weeks.append(week1)
@@ -39,115 +45,38 @@ def list_view(request, year=None, month=None, week=None):
         select_week = int(week)
         next_week = select_week + 1
         prev_week = select_week - 1
-        tourney_list = tourney_list.filter(date_start__week=week)
+        date_start = week_start_date(year_int, select_week)
+        date_end = date_start + timedelta(days=6)
+    if request.method == 'POST':
+        form = FilterForm(request.POST)
+        if form.is_valid():
+            date_start = form.cleaned_data['date_start']
+            date_end = form.cleaned_data['date_end']
+            custom_query = True
+    else:
+        init_data={'date_start': date_start, 'date_end': date_end}
+        form = FilterForm(initial=init_data)
+    # get tourney list by dates
+    tourney_list = Tourney.objects.filter(date_start__gte=date_start)
+    tourney_list = tourney_list.filter(date_end__lte=date_end)
     # export block
     if request.GET.get('file', '') == 'gov':
-        file_name = "sportapp/templates/sportapp/02-gov_week.docx"
-        #file_out = "sportapp/templates/sportapp/02-gov_month-out.docx"
-        doc1 = Document(file_name)
-        for tourney in tourney_list:
-            row1 = doc1.tables[2].add_row()
-            str_date = unicode(localize(tourney.date_start)).split(" ")
-            run11 = row1.cells[0].paragraphs[0].add_run(str_date[0] + " " + str_date[1])
-            run11.bold = True
-            run11.italic = True
-            if tourney.date_end and tourney.date_end != tourney.date_start:
-                end_date = unicode(localize(tourney.date_end)).split(" ")
-                p11b = row1.cells[0].add_paragraph()
-                p11b.alignment = align.CENTER
-                run11b = p11b.add_run(" - " + end_date[0] + " " + end_date[1])
-                run11b.bold = True
-                run11b.italic = True
-            row1.cells[0].paragraphs[0].alignment = align.CENTER
-            row1.cells[1].paragraphs[0].text = tourney.title
-            run21 = row1.cells[2].paragraphs[0].add_run(tourney.time_text)
-            run21.bold = True
-            row1.cells[2].paragraphs[0].alignment = align.CENTER
-            p22 = row1.cells[2].add_paragraph(unicode(tourney.location))
-            p22.alignment = align.CENTER
-            if tourney.resp_gov != None:
-                run31 = row1.cells[3].paragraphs[0].add_run(unicode(tourney.resp_gov))
-                run31.bold = True
-                row1.cells[3].paragraphs[0].alignment = align.CENTER
-                pp32 = row1.cells[3].add_paragraph(unicode(tourney.resp_gov.position))
-                pp32.alignment = align.CENTER
-        for row in doc1.tables[2].rows:
-            for cell in row.cells:
-                paragraphs = cell.paragraphs
-                for paragraph in paragraphs:
-                    for run in paragraph.runs:
-                        font = run.font
-                        font.size= Pt(12)
-        #doc1.save(file_out)
-        f = StringIO()
-        docx_title = "gov_week_" + str(select_week) + ".docx"
-        doc1.save(f)
-        length = f.tell()
-        f.seek(0)
-        response = HttpResponse(
-            f.getvalue(),
-            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        )
-        response['Content-Disposition'] = 'attachment; filename=' + docx_title
-        response['Content-Length'] = length
-        return response
-    # /end export block
-    # export block
+        return export_gov(tourney_list)
     if request.GET.get('file', '') == 'vfd':
-        file_name = "sportapp/templates/sportapp/03-vfd_week.docx"
-        #file_out = "sportapp/templates/sportapp/02-gov_month-out.docx"
-        doc1 = Document(file_name)
-        for tourney in tourney_list:
-            row1 = doc1.tables[2].add_row()
-            str_date = unicode(localize(tourney.date_start)).split(" ")
-            run11 = row1.cells[0].paragraphs[0].add_run(str_date[0] + " " + str_date[1])
-            run11.bold = True
-            run11.italic = True
-            if tourney.date_end and tourney.date_end != tourney.date_start:
-                end_date = unicode(localize(tourney.date_end)).split(" ")
-                p11b = row1.cells[0].add_paragraph()
-                p11b.alignment = align.CENTER
-                run11b = p11b.add_run(" - " + end_date[0] + " " + end_date[1])
-                run11b.bold = True
-                run11b.italic = True
-            row1.cells[0].paragraphs[0].alignment = align.CENTER
-            row1.cells[1].paragraphs[0].text = tourney.title
-            run21 = row1.cells[2].paragraphs[0].add_run(tourney.time_vfd)
-            run21.bold = True
-            row1.cells[2].paragraphs[0].alignment = align.CENTER
-            p22 = row1.cells[2].add_paragraph(unicode(tourney.location))
-            p22.alignment = align.CENTER
-            if tourney.resp_org != None:
-                run31 = row1.cells[3].paragraphs[0].add_run(unicode(tourney.resp_org))
-                run31.bold = True
-                row1.cells[3].paragraphs[0].alignment = align.CENTER
-        for row in doc1.tables[2].rows:
-            for cell in row.cells:
-                paragraphs = cell.paragraphs
-                for paragraph in paragraphs:
-                    for run in paragraph.runs:
-                        font = run.font
-                        font.size= Pt(12)
-        #doc1.save(file_out)
-        f = StringIO()
-        docx_title = "vfd_week_" + str(select_week) + ".docx"
-        doc1.save(f)
-        length = f.tell()
-        f.seek(0)
-        response = HttpResponse(
-            f.getvalue(),
-            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        )
-        response['Content-Disposition'] = 'attachment; filename=' + docx_title
-        response['Content-Length'] = length
-        return response
+        return export_vfd(tourney_list)
+    if request.GET.get('file', '') == 'min':
+        return export_min(tourney_list)
     # /end export block
     context = {'tourney_list': tourney_list,
+               'date_start': date_start,
+               'date_end': date_end,
                'year': year, 'month': month, 'week': week,
                'weeks': weeks,
                'current_week': current_week,
                'next_week': next_week,
                'prev_week': prev_week,
+               'form': form,
+               'custom_query': custom_query
                } 
     return render(request, 'sportapp/list.html', context)
     

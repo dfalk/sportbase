@@ -18,6 +18,12 @@
 
 <h1>Соревнования</h1>
 
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Показать" />
+</form>
+
 {% if weeks %}
 <b>Недели в этом месяце: </b>
 <ul>
@@ -36,7 +42,7 @@
 </p>
 {% endif %}
 
-<p> <b>Список соревнований{% if week %} - неделя {{week}}{% endif %}: </b></p>
+<p style="margin-top: 20px;"> <b>Список соревнований{% if week %} - неделя {{week}}{% endif %}: </b></p>
 <table class="form-list">
 {% for tourney in tourney_list %}
 <tr>
@@ -55,11 +61,16 @@
 
 {% if month or week %}
 <h3>Файл по форме</h3>
+{% if custom_query %}
+<p>Этот запрос выполнен с изменением дат и доступен только для просмотра.</p>
+<p>В этой версии генерация отчета возможна только по выбранным месяцу и неделе.</p>
+{% else %}
 <ul>
 <li><a href="?file=gov">для правительства</a></li>
-<li>для министерства</li>
 <li><a href="?file=vfd">для медиков</li>
+<li><a href="?file=min">для министерства</li>
 </ul>
+{% endif %}
 {% endif %}
 
 {% endblock %}

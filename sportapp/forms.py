@@ -48,5 +48,5 @@ class LocForm(ModelForm):
            fields = ['location','title']
 
 class FilterForm(forms.Form):
-      date_start = forms.DateField()
-      date_end = forms.DateField()
+      date_start = forms.DateField(label="Начало")
+      date_end = forms.DateField(label="Конец")

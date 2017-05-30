@@ -1,4 +1,4 @@
-{% extends base.html' %}
+{% extends 'base.html' %}
 
 {% block extra_head %}
 <style>
@@ -10,10 +10,16 @@
 {% block content %}
 
 
-<h1> {{ location }} </h1>
+<h1>Фильтр</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+
 <p><b>Список соревнований: </b></p>
 <table class="form-list">
-{% for tourney in tourney_loc  %}
+{% for tourney in tourney_list %}
 <tr>
     <td style="width: 130px"><b>{{ tourney.date_start }}</b>
     {% if tourney.date_end and tourney.date_start != tourney.date_end %}<br/>- {{ tourney.date_end}}{% endif %}</td>
@@ -21,5 +27,4 @@
 </tr>
 {% endfor %}
 </table>
-
 {% endblock %}

@@ -21,6 +21,8 @@ urlpatterns = [
     url(r'^sports/$', views.sport_list, name='sport_list'),
     url(r'^loc/$', views.sport_loc, name='sport_loc'),
     url(r'^loc/(?P<id>[0-9]+)/$', views.sport_loc_detail, name='sportloc'),
+    url(r'^loc/(?P<id>[0-9]+)/edit/$', views.sport_loc_detail_edit, name='sport_loc_edit'),
+    url(r'^filter/$', views.filter, name='filter'),
     #url(r'^month_gov/$', views.month_gov, name='month_gov'),
-    #url(r'^edit/$', views.edit, name='edit'),
+    url(r'^edit/$', views.edit, name='edit'),
 ]

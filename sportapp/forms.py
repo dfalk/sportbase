@@ -3,6 +3,8 @@
 
 from django import forms
 from django.forms import modelformset_factory
+from django.db import models
+from django.forms import ModelForm
 from .models import Tourney
 
 class TourneyForm(forms.ModelForm):
@@ -39,3 +41,12 @@ TourneyFormSet = modelformset_factory(Tourney, form=TourneyMassForm, extra=0)
 
 class UploadForm(forms.Form):
     file_name = forms.FileField(label='Файл', max_length=100)
+
+class LocForm(ModelForm):
+        class Meta:
+           model = Tourney
+           fields = ['location','title']
+
+class FilterForm(forms.Form):
+      date_start = forms.DateField()
+      date_end = forms.DateField()

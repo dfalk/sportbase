@@ -3,11 +3,12 @@
 
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required
 from .models import Tourney, Sport, Location
-from .forms import UploadForm, TourneyFormSet, TourneyForm
+from .forms import UploadForm, TourneyFormSet, TourneyForm, LocForm, FilterForm
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH as align
 from docx.shared import Pt
@@ -195,7 +196,29 @@ def edit(request,  tourney_id):
     else:
         form = TourneyForm(instance=tourney)
     return render(request, 'sportapp/edit.html', {'form': form})
-    
+
+def sport_loc(request):
+    location = Location.objects.all()
+    context = {'location':location}
+    return render(request, 'sportapp/sport_loc.html', context)
+
+def sport_loc_detail(request, id):
+    location = Location.objects.get(id=id)
+    tourney_loc = Tourney.objects.filter(location=location)
+    context = {'location':location, 'tourney':tourney_loc}
+    return render(request, 'sportapp/sport_loc_detail.html', context)
+
+def sport_list(request):
+    sports = Sport.objects.all()
+    context = {'sports':sports}
+    return render(request, 'sportapp/sport_list.html', context)   
+
+def sport_detail(request, id):
+    sport = Sport.objects.get(id=id) 
+    tourney_list = Tourney.objects.filter(sport=sport)
+    context = {'sport': sport, 'tourney_list':tourney_list}
+    return render(request, 'sportapp/sport_detail.html', context)
+
 def detail(request, tourney_id):
     tourney = Tourney.objects.get(id=tourney_id)
     context = {'tourney': tourney}
@@ -205,7 +228,30 @@ def month_gov(request):
     tourney_list = Tourney.objects.order_by("date_start")
     context = {'tourney_list': tourney_list}
     return render(request, 'sportapp/month_gov.html', context)
-    
+
+def sport_loc_detail_edit(request,id):
+    loc = Location.objects.get(id=id)
+    if request.method == 'POST': 
+         form = LocForm(request.POST,instance=loc)
+         if form.is_valid():
+           form.save()
+           return HttpResponseRedirect('/')
+    else:
+       form = LocForm(instance=loc)
+    return render(request, 'sportapp/loc_edit.html', {'form':form})
+
+def filter(request):
+    tourney_list = []
+    if request.method == 'POST':
+        form = FilterForm(request.POST)
+        if form.is_valid():
+	   date_start = form.cleaned_data['date_start']
+           date_end = form.cleaned_data['date_end']
+	   tourney_list = Tourney.objects.filter(date_start__gte=date_start).filter(date_end__lte=date_end)
+    else:
+        form = FilterForm()
+    return render(request, 'sportapp/filter.html', {'form': form, 'tourney_list': tourney_list})
+
 @permission_required('sportapp.change_tourney')
 def upload(request):
    # if this is a POST request we need to process the form data

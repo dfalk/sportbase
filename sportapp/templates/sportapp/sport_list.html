@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Виды спорта</h1>
+
+<ul>
+{% for sport in sports %}
+	<li><a href="/sport/sports/{{ sport.id }}">{{ sport }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

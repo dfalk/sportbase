@@ -177,10 +177,7 @@ def filter(request):
         if form.is_valid():
 	   date_start = form.cleaned_data['date_start']
            date_end = form.cleaned_data['date_end']
-	   #tourney_list = Tourney.objects.filter(date_start__gte=date_start).filter(date_end__lte=date_end)
-	   tourney_list = Tourney.objects.get((Q(date_start__gte=date_start,date_end__gte=date_end)) | (Q(date_start__lte=date_start,date_end__lte=date_end)) | (Q(date_start__gte=date_start,date_start__lte=date_end))) 
-#(Q(date_start__lte=date_start,date_end__lte=date_end)) 
-#(Q(date_start__gte=date_start) & Q(date_start__lte=date_end))
+	   tourney_list = Tourney.objects.filter((Q(date_start__gte=date_start,date_end__gte=date_end)) | (Q(date_end__gte=date_start, date_end__lte=date_end)) | (Q(date_start__gte=date_start, date_start__lte=date_end))) 
     else:
         form = FilterForm()
     return render(request, 'sportapp/filter.html', {'form': form, 'tourney_list': tourney_list})

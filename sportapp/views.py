@@ -14,6 +14,7 @@ from .utils import week_start_date
 from datetime import datetime, date, timedelta
 from django.utils import formats
 from django.utils.formats import localize
+from django.db.models import Q
 import calendar
 import json
 
@@ -61,11 +62,11 @@ def list_view(request, year=None, month=None, week=None):
     tourney_list = tourney_list.filter(date_end__lte=date_end)
     # export block
     if request.GET.get('file', '') == 'gov':
-        return export_gov(tourney_list)
+        return export_gov(tourney_list, date_start, date_end)
     if request.GET.get('file', '') == 'vfd':
-        return export_vfd(tourney_list)
+        return export_vfd(tourney_list, date_start, date_end)
     if request.GET.get('file', '') == 'min':
-        return export_min(tourney_list)
+        return export_min(tourney_list, date_start, date_end)
     # /end export block
     context = {'tourney_list': tourney_list,
                'date_start': date_start,
@@ -176,7 +177,10 @@ def filter(request):
         if form.is_valid():
 	   date_start = form.cleaned_data['date_start']
            date_end = form.cleaned_data['date_end']
-	   tourney_list = Tourney.objects.filter(date_start__gte=date_start).filter(date_end__lte=date_end)
+	   #tourney_list = Tourney.objects.filter(date_start__gte=date_start).filter(date_end__lte=date_end)
+	   tourney_list = Tourney.objects.get((Q(date_start__gte=date_start,date_end__gte=date_end)) | (Q(date_start__lte=date_start,date_end__lte=date_end)) | (Q(date_start__gte=date_start,date_start__lte=date_end))) 
+#(Q(date_start__lte=date_start,date_end__lte=date_end)) 
+#(Q(date_start__gte=date_start) & Q(date_start__lte=date_end))
     else:
         form = FilterForm()
     return render(request, 'sportapp/filter.html', {'form': form, 'tourney_list': tourney_list})

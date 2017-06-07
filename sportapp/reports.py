@@ -12,10 +12,12 @@ from django.utils.formats import localize
 import calendar
 import json
 
-def export_gov(tourney_list):
+def export_gov(tourney_list,date_start,date_end):
     file_name = "sportapp/reports/02-gov.docx"
     doc1 = Document(file_name)
-    for tourney in tourney_list:
+    str_date_n = unicode(localize(date_start)).split(" ")
+    t = doc1.paragraphs[2].text = ((str_date_n[0]) + ' - ' + (unicode(localize(date_end))))
+    for tourney in tourney_list:  
         row1 = doc1.tables[2].add_row()
         str_date = unicode(localize(tourney.date_start)).split(" ")
         run11 = row1.cells[0].paragraphs[0].add_run(str_date[0] + " " + str_date[1])
@@ -61,9 +63,11 @@ def export_gov(tourney_list):
     response['Content-Length'] = length
     return response
     
-def export_vfd(tourney_list):
+def export_vfd(tourney_list,date_start,date_end):
     file_name = "sportapp/reports/03-vfd.docx"
     doc1 = Document(file_name)
+    str_date_n = unicode(localize(date_start)).split(" ")
+    t = doc1.paragraphs[2].text = ((str_date_n[0]) + ' - ' + (unicode(localize(date_end))))
     for tourney in tourney_list:
         row1 = doc1.tables[2].add_row()
         str_date = unicode(localize(tourney.date_start)).split(" ")
@@ -108,9 +112,11 @@ def export_vfd(tourney_list):
     response['Content-Length'] = length
     return response
     
-def export_min(tourney_list):
+def export_min(tourney_list,date_start,date_end):
     file_name = "sportapp/reports/04-min.docx"
     doc1 = Document(file_name)
+    str_date_n = unicode(localize(date_start)).split(" ")
+    t = doc1.paragraphs[3].text = ((str_date_n[0]) + ' - ' + (unicode(localize(date_end))))
     for tourney in tourney_list:
         # add new row
         row1 = doc1.tables[0].add_row()

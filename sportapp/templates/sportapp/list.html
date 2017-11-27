@@ -9,7 +9,9 @@
 
 {% block breadcrumb %}
 {{ block.super }}
-{% if year %}- <a href="/sport/{{ year }}">{{ year }}</a>{% endif %}
+{% if sport %}- <a href="/sport/sports/{{ sport.id }}">{{ sport }}</a>{% endif %}
+{% if sport and year %}- <a href="/sport/sports/{{ sport.id }}/{{ year }}">{{ year }}</a>{% endif %}
+{% if not sport and year %}- <a href="/sport/{{ year }}">{{ year }}</a>{% endif %}
 {% if month %}- <a href="/sport/{{ year }}/{{ month }}">{{ month }}</a>{% endif %}
 {% if week %}- Неделя <a href="/sport/{{ year }}/w{{ week }}">{{ week }}</a>{% endif %}
 {% endblock %}
@@ -18,26 +20,29 @@
 
 <h1>Соревнования</h1>
 
+<!--
 <form action="" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Показать" />
 </form>
+-->
 
-{% if weeks %}
+{% if weeks and not sport %}
 <b>Недели в этом месяце: </b>
-<ul>
 {% for week in weeks %}
-<li><a href="/sport/2017/w{{ week}}/">{{ week}}</a></li>
+<a href="/sport/2017/w{{ week}}/">{{ week}}</a>&nbsp;
 {% endfor %}
-</ul>
 {% endif %}
 
 {% if week == None and month == None %}
 <p>Месяцы: 
 {% for month in '0123456789ab'|make_list %}
-    
-    <a href="/sport/2017/{% if forloop.counter < 10 %}0{% endif %}{{ forloop.counter }}">{{ forloop.counter }}</a>
+{% if sport %}
+    <a href="/sport/sports/{{ sport.id }}/{{ year }}/{% if forloop.counter < 10 %}0{% endif %}{{ forloop.counter }}">{{ forloop.counter }}</a>
+{% else %}    
+    <a href="/sport/{{ year }}/{% if forloop.counter < 10 %}0{% endif %}{{ forloop.counter }}">{{ forloop.counter }}</a>
+{% endif %}
 {% endfor %}
 </p>
 {% endif %}
@@ -52,9 +57,26 @@
 {% endfor %}
 </table>
 
+
+{% if request.user.username == 'uso' %}
+<table>
+<tr><td>Судейские</td><td>{{ judje_sum.judje_sum__sum }}</td></tr>
+<tr><td>Наградная</td><td>{{ judje_sum.reward_sum__sum }}</td></tr>
+<tr><td>Печатная</td><td>{{ judje_sum.print_sum__sum }}</td></tr>
+<tr><td>Проезд</td><td>{{ judje_sum.proezd_sum__sum }}</td></tr>
+<tr><td>Проживание</td><td>{{ judje_sum.projiv_sum__sum }}</td></tr>
+<tr><td>Питание</td><td>{{ judje_sum.pitanie_sum__sum }}</td></tr>
+<tr><td>Взнос</td><td>{{ judje_sum.vznos_sum__sum }}</td></tr>
+<tr><td>Аренда</td><td>{{ judje_sum.arenda_sum__sum }}</td></tr>
+<tr><td>Медики</td><td>{{ judje_sum.medic_sum__sum }}</td></tr>
+<tr><td>Транспорт</td><td>{{ judje_sum.transport_sum__sum }}</td></tr>
+</table>
+{% endif %}
+
 {% if perms.sportapp.change_tourney %}
-{% if month %}<p> Управление: <a href="/sport/{{ year }}/{{ month }}/edit">Редактор</a></p>{% endif %}
-{% if week %}<p>Управление: <a href="/sport/{{ year }}/w{{ week }}/edit">Редактор</a></p>{% endif %}
+{% if sport and year %}<p> Управление: <a href="/sport/sports/{{ sport.id }}/{{ year }}/edit">Редактор</a></p>{% endif %}
+{% if not sport and month %}<p> Управление: <a href="/sport/{{ year }}/{{ month }}/edit">Редактор</a></p>{% endif %}
+{% if not sport and week %}<p>Управление: <a href="/sport/{{ year }}/w{{ week }}/edit">Редактор</a></p>{% endif %}
 {% endif %}
 
 {% if week %}<a href="/sport/2017/w{{ prev_week}}/">&lt;-- Предыдущая</a> ... <a href="/sport/2017/w{{ next_week}}/">Следующая --&gt;</a>{% endif %}

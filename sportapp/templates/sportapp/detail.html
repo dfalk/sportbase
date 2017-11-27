@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+{% block breadcrumb %}
+{{ block.super }}
+- <a href="/sport/sports/{{ tourney.sport_id }}/{{ tourney.date_start.year }}">{{ tourney.sport }} {{ tourney.date_start.year }}</a>
+{% endblock %}
+
 {% block content %}
 
 <h1>Соревнование</h1>
@@ -17,16 +22,28 @@
     <li><b>Закрытие по окончанию:</b> {{ tourney.closing_by_end }}</li>
     <li><b>Время для всех:</b> {{ tourney.time_text|linebreaks }}</li>
     <li><b>Время для медиков:</b> {{ tourney.time_vfd|linebreaks }}</li>
-    <li><b>Судейские:</b> {{ tourney.judje_sum }}</li>
-    <li><b>Наградная:</b> {{ tourney.reward_sum }}</li>
-    <li><b>Печатная:</b> {{ tourney.print_sum }}</li>
     <li><b>Отв. орг.:</b> {{ tourney.resp_org }}</li>
     <li><b>Отв. прав.:</b> {{ tourney.resp_gov }}</li>
     <li><b>Отв. зам.:</b> {{ tourney.resp_zam }}</li>
     <li><b>Отв. УСО:</b> {{ tourney.resp_uso }}</li>
+
+{% if request.user.username == 'uso' %}
+<li>Судейские {{ tourney.judje_sum }}</li>
+<li>Наградная {{ tourney.reward_sum }}</li>
+<li>Печатная {{ tourney.print_sum }}</li>
+<li>Проезд {{ tourney.proezd_sum }}</li>
+<li>Проживание {{ tourney.projiv_sum }}</li>
+<li>Питание {{ tourney.pitanie_sum }}</li>
+<li>Взнос {{ tourney.vznos_sum }}</li>
+<li>Аренда {{ tourney.arenda_sum }}</li>
+<li>Медики {{ tourney.medic_sum }}</li>
+<li>Транспорт {{ tourney.transport_sum }}</li>
+{% endif %}
+
 </ul>
 
 <a href="/sport/detail/{{ tourney.id }}/edit">Изменить</a>
+<a href="/sport/detail/{{ tourney.id }}/del">Удалить</a>
 <br />
 
 {% endblock %}

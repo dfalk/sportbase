@@ -7,10 +7,18 @@
 </style>
 {% endblock %}
 
+{% block breadcrumb %}
+<a href="/">Главная</a> - 
+<a href="/sport/sports/">Виды спорта</a> -
+<a href="/sport/sports/{{ sport.id }}">{{ sport }}</a>
+{% endblock %}
+
 {% block content %}
 
 
 <h1> {{ sport }} </h1>
+<a href="/sport/sports/{{ sport.id }}/2017">2017</a>&nbsp;
+<a href="/sport/sports/{{ sport.id }}/2018">2018</a>
 <p><b>Список соревнований: </b></p>
 <table class="form-list">
 {% for tourney in tourney_list %}

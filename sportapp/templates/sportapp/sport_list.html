@@ -4,10 +4,14 @@
 
 <h1>Виды спорта</h1>
 
-<ul>
+<table>
 {% for sport in sports %}
-	<li><a href="/sport/sports/{{ sport.id }}">{{ sport }}</a></li>
+<tr>
+	<td><a href="/sport/sports/{{ sport.id }}">{{ sport }}</a>&nbsp;</td>
+	<td><a href="/sport/sports/{{ sport.id }}/2017">2017</a>&nbsp;</td>
+	<td><a href="/sport/sports/{{ sport.id }}/2018">2018</a></td>
+</tr>
 {% endfor %}
-</ul>
+</table>
 
 {% endblock %}

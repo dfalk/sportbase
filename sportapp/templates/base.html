@@ -20,6 +20,85 @@
 #menu a { padding: 4px; }
 </style>
 
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Главная</a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar-main">
+      <!-- Содержимое основной части -->
+	<ul class="nav navbar-nav">
+        <li class="passive"><a href="/sport/sports/">Виды спорта</a></li>
+	<li class="passive"><a href="/sport/loc/">Места проведения</a></li>
+      <!-- Выпадающий список -->
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Планы 2017<span class="caret"></span></a>
+
+          <ul class="dropdown-menu">
+            <li><a href="/sport/2017/">2017</a></li>
+	    <li role="separator" class="divider"></li>  
+	    <li><a href="/sport/2017/01">Январь</a></li>
+	    <li><a href="/sport/2017/02">Февраль</a></li>
+	    <li><a href="/sport/2017/03">Март</a></li>
+	    <li><a href="/sport/2017/04">Апрель</a></li>
+	    <li><a href="/sport/2017/05">Май</a></li>
+	    <li><a href="/sport/2017/06">Июнь</a></li>
+	    <li><a href="/sport/2017/07">Июль</a></li>
+	    <li><a href="/sport/2017/08">Август</a></li>
+	    <li><a href="/sport/2017/09">Сентябрь</a></li>
+	    <li><a href="/sport/2017/10">Октябрь</a></li>
+	    <li><a href="/sport/2017/11">Ноябрь</a></li>
+	    <li><a href="/sport/2017/12">Декабрь</a></li>
+          </ul>
+       </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Планы 2018<span class="caret"></span></a>
+
+          <ul class="dropdown-menu">
+            <li><a href="/sport/2018/">2018</a></li>
+	    <li role="separator" class="divider"></li>  
+	    <li><a href="/sport/2018/01">Январь</a></li>
+	    <li><a href="/sport/2018/02">Февраль</a></li>
+	    <li><a href="/sport/2018/03">Март</a></li>
+	    <li><a href="/sport/2018/04">Апрель</a></li>
+	    <li><a href="/sport/2018/05">Май</a></li>
+	    <li><a href="/sport/2018/06">Июнь</a></li>
+	    <li><a href="/sport/2018/07">Июль</a></li>
+	    <li><a href="/sport/2018/08">Август</a></li>
+	    <li><a href="/sport/2018/09">Сентябрь</a></li>
+	    <li><a href="/sport/2018/10">Октябрь</a></li>
+	    <li><a href="/sport/2018/11">Ноябрь</a></li>
+	    <li><a href="/sport/2018/12">Декабрь</a></li>
+          </ul>
+       </li>
+      </ul>
+
+     <!-- Блок, расположенный справа -->
+      <ul class="nav navbar-nav navbar-right"> 
+        {% if request.user.is_authenticated %}
+	<li class="dropdown">
+	  <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ request.user }}<span class="caret"></span></a>
+	  <ul class="dropdown-menu">
+	  {% if request.user.is_staff %}
+	  <li><a href="/admin/">Админка</a></li>
+	  {% if request.user.is_staff %}
+	  <li><a href="/sport/upload2018/">Загрузить 2018</a></li>
+	 {% endif %}
+	 {% endif %}
+	  <li role="separator" class="divider"></li>
+          <li><a href="/accounts/logout">Выход</a></li>
+          </ul>
+	</li>
+	{% else %}
+	<li><a href="/accounts/login">Вход</a></li>
+	{% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
 
 {% block extra_head %}
 {% endblock %}
@@ -29,10 +108,6 @@
 <div id="menu" class="container">
 <div class="row">
 <div class="col-sm-12">
-<b>Спортбаза</b>
-<a href="/">Главная</a>
-<a href="/sport/sports/">Виды спорта</a>
-<a href="/sport/loc/">Места проведения</a>
 </div>
 </div>
 </div>
@@ -57,47 +132,7 @@
 {% block content %}
 
 {% endblock %}
-</div>
-<div class="col-sm-3">
-<h3>Меню</h3>
-{% block rightblock %}
-<h4>Логин:</h4>
-<ul>
-{% if request.user.is_authenticated %}
-<li>{{ request.user }}</li>
-<li><a href="/accounts/logout">Выход</a></li>
-{% else %}
-<li><a href="/accounts/login">Вход</a></li>
-{% endif %}
-</ul>
 
-{% if request.user.is_staff %}
-<h4>Админ:</h4>
-<ul>
-<li><a href="/admin/">Админка</a></li>
-{% if request.user.is_superuser %}
-<li><a href="/sport/upload/">Загрузить</a></li>
-{% endif %}
-</ul>
-{% endif %}
-<h4>Планы:</h4>
-<ul>
-<li><a href="/sport/2017/"><b>2017</b></a></li>
-<li><a href="/sport/2017/01/">январь</a></li>
-<li><a href="/sport/2017/02/">февраль</a></li>
-<li><a href="/sport/2017/03/">март</a></li>
-<li><a href="/sport/2017/04/">апрель</a></li>
-<li><a href="/sport/2017/05/">май</a></li>
-<li><a href="/sport/2017/06/">июнь</a></li>
-<li><a href="/sport/2017/07/">июль</a></li>
-<li><a href="/sport/2017/08/">август</a></li>
-<li><a href="/sport/2017/09/">сентябрь</a></li>
-<li><a href="/sport/2017/10/">октябрь</a></li>
-<li><a href="/sport/2017/11/">ноябрь</a></li>
-<li><a href="/sport/2017/12/">декабрь</a></li>
-</ul>
-{% endblock %}
-</div>
 
 </div>
 </div>
@@ -117,7 +152,8 @@
     
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+{% block javascript %}
+{% endblock %}
 {% block extra_footer %}
 {% endblock %}
 

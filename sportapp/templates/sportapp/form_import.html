@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Импорт</h1>
+
+<form enctype="multipart/form-data" method="post" action="">
+    {% csrf_token %}
+{{ formset }}
+    <input type="submit" name="import" value="Импортировать выбранное" />
+</form>
+
+{% endblock %}

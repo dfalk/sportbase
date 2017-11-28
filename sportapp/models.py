@@ -111,8 +111,8 @@ class Tourney(models.Model):
     numbers_kol = models.IntegerField('Кол-во номеров', blank=True, null=True, default=0)
     tablesA1_sum = models.DecimalField('Сумма таблиц А1', max_digits=5, blank=True, null=True, decimal_places=2, default=0)
     tablesA1_kol = models.IntegerField('Кол-во таблиц А1', blank=True, null=True, default=0)
-    ambulance_time = models.DecimalField('Скорая помощь(часы)', max_digits=5, blank=True, null=True, decimal_places=2, default=0)
-    ambulance_sum = models.DecimalField('Скорая помощь(сумма)', max_digits=5, blank=True, null=True, decimal_places=2, default=0)
+    ambulance_time = models.DecimalField('Скорая помощь( часы )', max_digits=5, blank=True, null=True, decimal_places=2, default=0)
+    ambulance_sum = models.DecimalField('Скорая помощь( сумма )', max_digits=5, blank=True, null=True, decimal_places=2, default=0)
     report = models.BooleanField('Отчет', blank=True, default=0)
     protocol = models.BooleanField('Протокол', blank=True, default=0)
     resp_org = models.CharField(default='Минспорт', max_length=250,

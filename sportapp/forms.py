@@ -27,7 +27,7 @@ class TourneyMassForm(forms.ModelForm):
 
     class Meta:
         model = Tourney
-        fields=('title', 'sport', 'location', 'location2', 'location3', 'location4', 'participants', 'date_start', 'date_end', 'date_in', 'date_out', 'time_text', 'time_vfd', 'resp_org', 'resp_gov', 'resp_zam', 'resp_uso', 'judje_sum', 'reward_sum', 'print_sum', 'typer', 'grp')
+        fields=('title', 'sport', 'location', 'location2', 'location3', 'location4', 'participants', 'date_start', 'date_end', 'date_in', 'date_out', 'time_text', 'time_vfd', 'resp_org', 'resp_gov', 'resp_zam', 'resp_uso', 'judje_sum', 'reward_sum', 'print_sum', 'typer', 'grp', 'cup1_sum', 'cup1_kol', 'cup2_sum', 'cup2_kol', 'cup3_sum', 'cup3_kol', 'cups_sum', 'cups_kol', 'tokens_sum', 'tokens_kol', 'medals_sum', 'medals_kol', 'prizes_sum', 'prizes_kol', 'diploms_sum', 'diploms_kol', 'postersA4_sum', 'postersA4_kol', 'postersA3_sum', 'postersA3_kol', 'postersA2_sum', 'postersA2_kol', 'banners_sum', 'banners_kol', 'frames_sum', 'frames_kol', 'badges_sum', 'badges_kol', 'stickers_sum', 'stickers_kol', 'numbers_sum', 'numbers_kol', 'tablesA1_sum', 'tablesA1_kol', 'ambulance_sum', 'ambulance_time', 'report', 'protocol')
         widgets={
             'title': forms.HiddenInput(attrs={}),
             #'sport': forms.HiddenInput(attrs={}),

@@ -7,6 +7,7 @@
 .form-dates input { width: 100px;}
 .form-sport select { width: 200px;}
 .form-time-text textarea { width: 160px; height: 120px}
+.form-stat input { width: 5em; }
 </style>
 {% endblock %}
 
@@ -39,6 +40,13 @@
             <td class="form-time-text">Время для всех</td>
             <td class="form-time-text">Время для медиков</td>
             <td>Ответственные
+	    <td>
+	    <td>Кубки</td>
+	    <td></td>
+	    <td></td>
+	    <td></td>
+	    <td></td>
+	    <td></td>
             </td>
             
         </tr>
@@ -72,8 +80,71 @@
                  <br />{{ form.judje_sum }}
                  <br /> {{ form.reward_sum }}
                  <br /> {{ form.print_sum }}
-            </td>
-            
+	    </td>
+	    <td class="form-stat">Сум./Кол. кубков за 1 место
+		 <br />{{ form.cup1_sum }}
+		 <bt />{{ form.cup1_kol }}
+	        Сум./Кол. кубков за 2 место
+		 <br />{{ form.cup2_sum }}
+		 <br />{{ form.cup2_kol }}
+		Сум./Кол. кубков за 3 место
+		 <br />{{ form.cup3_sum }}
+		 <br />{{ form.cup3_kol }}
+		Сум./Кол. кубков
+		 <br />{{ form.cups_sum }}
+		 <br />{{ form.cups_kol }}
+	    </td>
+	    <td class="form-stat">Сум./Кол. жетонов
+		 <br />{{ form.tokens_sum }}
+		 <bt />{{ form.tokens_kol }}
+	        Сум./Кол. медалей
+		 <br />{{ form.medals_sum }}
+		 <br />{{ form.medals_kol }}
+		Сум./Кол. призов
+		 <br />{{ form.prizes_sum }}
+		 <br />{{ form.prizes_kol }}
+		Сум./Кол. дипломов
+		 <br />{{ form.diploms_sum }}
+		 <br />{{ form.diploms_kol }}
+	    </td>
+	    <td class="form-stat">Сум./Кол. афиш А4
+		 <br />{{ form.postersA4_sum }}
+		 <bt />{{ form.postersA4_kol }}
+	        Сум./Кол. афиш А3
+		 <br />{{ form.postersA3_sum }}
+		 <br />{{ form.postersA3_kol }}
+		Сум./Кол. афиш А2
+		 <br />{{ form.postersA2_sum }}
+		 <br />{{ form.postersA2_kol }}
+		Сум./Кол. баннеры
+		 <br />{{ form.banners_sum }}
+		 <br />{{ form.banners_kol }}
+	    </td>
+	    <td class="form-stat">Сум./Кол. рамок
+		 <br />{{ form.frames_sum }}
+		 <bt />{{ form.frames_kol }}
+	        Сум./Кол. бейджиков
+		 <br />{{ form.badges_sum }}
+		 <br />{{ form.badges_kol }}
+		Сум./Кол. наклеек
+		 <br />{{ form.stickers_sum }}
+		 <br />{{ form.stickers_kol }}
+		Сум./Кол. номеров
+		 <br />{{ form.numbers_sum }}
+		 <br />{{ form.numbers_kol }}
+		Сум./Кол. таблиц А1
+		 <br />{{ form.tablesA1_sum }}
+		 <br />{{ form.tablesA1_kol }}
+	    </td>
+	    <td class="form-stat">Медики ВФД Сум./Часы
+		 <br />{{ form.ambulance_sum }}
+		 <bt />{{ form.ambulance_time }}
+	    </td>
+	    <td class="form-stat">Отчет
+		 <br />{{ form.report }}
+	        Протокол
+		 <br />{{ form.protocol }}
+	    </td>
         </tr>
     {% endfor %}
     </table>

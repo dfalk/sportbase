@@ -152,7 +152,7 @@ def list_edit(request, year=None, month=None, week=None, sport=None, typer=1):
         formset = TourneyFormSet(request.POST, request.FILES, queryset=tourney_list)
         if formset.is_valid():
             formset.save()
-            return redirect('list_month', year=year, month=month)
+            return redirect('sport_list')
     else:
         formset = TourneyFormSet(queryset=tourney_list)
     context = {'formset': formset, 'sports_js': sports_js,

@@ -66,8 +66,8 @@
                         {{ form.location2 }} {{ form.location3 }} {{ form.location4 }}
                  <br /> {{ form.participants }}
             </td>
-            <td class="form-time-text">{{ form.time_text}}</td>
-            <td class="form-time-text">{{ form.time_vfd}}</td>
+            <td class="form-time-text">{{ form.time_text}}<br />
+            {{ form.time_vfd}}</td>
             <td>Орг/прав/зам/УСО
                  <br />{{ form.resp_org }}
                  <br /> {{ form.resp_gov }}
@@ -83,7 +83,7 @@
 	    </td>
 	    <td class="form-stat">Сум./Кол. кубков за 1 место
 		 <br />{{ form.cup1_sum }}
-		 <bt />{{ form.cup1_kol }}
+		 {{ form.cup1_kol }}
 	        Сум./Кол. кубков за 2 место
 		 <br />{{ form.cup2_sum }}
 		 <br />{{ form.cup2_kol }}
@@ -96,7 +96,7 @@
 	    </td>
 	    <td class="form-stat">Сум./Кол. жетонов
 		 <br />{{ form.tokens_sum }}
-		 <bt />{{ form.tokens_kol }}
+		 <br />{{ form.tokens_kol }}
 	        Сум./Кол. медалей
 		 <br />{{ form.medals_sum }}
 		 <br />{{ form.medals_kol }}
@@ -109,7 +109,7 @@
 	    </td>
 	    <td class="form-stat">Сум./Кол. афиш А4
 		 <br />{{ form.postersA4_sum }}
-		 <bt />{{ form.postersA4_kol }}
+		 <br />{{ form.postersA4_kol }}
 	        Сум./Кол. афиш А3
 		 <br />{{ form.postersA3_sum }}
 		 <br />{{ form.postersA3_kol }}
@@ -139,11 +139,10 @@
 	    <td class="form-stat">Медики ВФД Сум./Часы
 		 <br />{{ form.ambulance_sum }}
 		 <bt />{{ form.ambulance_time }}
-	    </td>
-	    <td class="form-stat">Отчет
-		 <br />{{ form.report }}
-	        Протокол
-		 <br />{{ form.protocol }}
+		 <br />Отчет: {{ form.report }}
+	        <br />Протокол: {{ form.protocol }}
+                <br />Группировка
+                 <br />{{ form.grp }}
 	    </td>
         </tr>
     {% endfor %}

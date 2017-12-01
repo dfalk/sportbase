@@ -19,6 +19,7 @@ from django.utils.formats import localize
 from django.db.models import Q, Sum
 from django.forms import formset_factory
 from docx import Document
+from openpyxl import load_workbook
 import calendar
 import json
 
@@ -348,5 +349,37 @@ def import2018(request):
     else:
         pass
     return JsonResponse({'accepted': True})
+##############################################
+def uploadxl(request):
+    wb = load_workbook(filename = 'test.xlsx')
+    sheet = wb['Test']
+#    temp_dict = {}
+#    eventName = 'ASDASD'
+#    dict = {'event':eventName}
+#    temp_dict[1]= dict
+#
+    dict = {}
+    rows_count = sheet.max_row
+    column_count = sheet.max_column
+    i=1
+    dict = {i: {'eventName': "asdasd"}}
+#    for i in range(1,rows_count):
+#	for j in range(2,column_count):
+#	    eventName = sheet.cell(row=i,column=2).value
+#	    dict = {i: {'eventName': eventName}}
+#	
+#    for i in range(3,rows_count):
+#	for j in range(2,column_count):
+#	    if (sheet.cell(row=i,column=j).value) != None:
+#	       data.append(sheet.cell(row=i,column=j).value)  
+#    for i in range(1,column_count):
+#	if (sheet.cell(row=1,column=i).value) != None:
+#          columns_val.append(sheet.cell(row=1,column=i).value)
+#    for i in range(3,row_count+1):
+#        if (sheet.cell(row=i,column=2).value) != None:
+#           eventName_val.append(sheet.cell(row=i,column=2).value)
+   
+    context = {'data': dict}
+    return render(request, 'sportapp/uploadxl.html', context)
 
 

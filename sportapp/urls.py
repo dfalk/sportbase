@@ -32,4 +32,5 @@ urlpatterns = [
     url(r'^loc/(?P<id>[0-9]+)/edit/$', views.sport_loc_detail_edit, name='sport_loc_edit'),
     url(r'^filter/$', views.list_view, {'year': dnow.year, 'month': dnow.month}, name='filter'),
     url(r'^sport_list', views.sport_list, name='sport_list'),
+    url(r'^uploadxl', views.uploadxl, name='uploadxl'),
 ]

@@ -2,14 +2,27 @@
 
 {% block content %}
 
-{% for data in data %}
 
+<form enctype="multipart/form-data" method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="read" value="Распознать" />
+    <br />
 
-
-{% endfor %}
-
-
-{{ data.1.eventName }}
-
+    <table border="1">
+      <tr>
+        <th>Мероприятие</th>
+        <th>Дата старта</th>
+        <th>Дата окончания</th>
+      </tr>
+      {% for data_val in data %}
+      <tr><td>{{ data_val.eventName }} </td>
+          <td>{{ data_val.eventStartDate }} </td>
+          <td>{{ data_val.eventEndDate }} </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <br />
+</form>
 
 {% endblock %}

@@ -44,6 +44,9 @@ class UploadForm(forms.Form):
     location = forms.ModelChoiceField(queryset=Location.objects.all())
     file_name = forms.FileField(label='Файл', max_length=100)
 
+class UploadFormxl(forms.Form):
+    file_name = forms.FileField(label='Файл', max_length=100)
+
 class ImportForm(forms.Form):
     title = forms.CharField(max_length=200)
     date_start = forms.DateField()

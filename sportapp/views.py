@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required
 from .models import Tourney, Sport, Location
-from .forms import UploadForm, TourneyFormSet, TourneyForm
+from .forms import UploadForm, TourneyFormSet, TourneyForm, UploadFormxl
 from .forms import LocForm, FilterForm, ImportFormSet
 from .reports import export_gov, export_vfd, export_min
 from .utils import week_start_date
@@ -349,37 +349,33 @@ def import2018(request):
     else:
         pass
     return JsonResponse({'accepted': True})
-##############################################
+
 def uploadxl(request):
-    wb = load_workbook(filename = 'test.xlsx')
-    sheet = wb['Test']
-#    temp_dict = {}
-#    eventName = 'ASDASD'
-#    dict = {'event':eventName}
-#    temp_dict[1]= dict
-#
-    dict = {}
-    rows_count = sheet.max_row
-    column_count = sheet.max_column
-    i=1
-    dict = {i: {'eventName': "asdasd"}}
-#    for i in range(1,rows_count):
-#	for j in range(2,column_count):
-#	    eventName = sheet.cell(row=i,column=2).value
-#	    dict = {i: {'eventName': eventName}}
-#	
-#    for i in range(3,rows_count):
-#	for j in range(2,column_count):
-#	    if (sheet.cell(row=i,column=j).value) != None:
-#	       data.append(sheet.cell(row=i,column=j).value)  
-#    for i in range(1,column_count):
-#	if (sheet.cell(row=1,column=i).value) != None:
-#          columns_val.append(sheet.cell(row=1,column=i).value)
-#    for i in range(3,row_count+1):
-#        if (sheet.cell(row=i,column=2).value) != None:
-#           eventName_val.append(sheet.cell(row=i,column=2).value)
-   
-    context = {'data': dict}
+    dictArray = []
+    dictall = {}
+    if request.method == 'POST':
+       form = UploadFormxl(request.POST, request.FILES)
+       if form.is_valid() and 'read' in request.POST:
+          file_name = request.FILES['file_name']
+          wb = load_workbook(file_name)
+	  sheet = wb['Test']
+	  rows_count = sheet.max_row
+          column_count = sheet.max_column
+	  for i in range(1,rows_count):
+	      if (sheet.cell(row=i+3,column=2).value) != None:
+	          eventName = sheet.cell(row=i+3,column=2).value
+	          eventStartDate = sheet.cell(row=i+3,column=3).value
+	          eventEndDate = sheet.cell(row=i+3,column=4).value
+	          newStartDate = date(2018, eventStartDate.month, eventStartDate.day)  
+	          if eventEndDate != None: 
+	             newEndDate = date(2018, eventEndDate.month, eventEndDate.day)
+                  else:
+	             newEndDate = ''
+	          dictall[i] = {'eventName': eventName, 'eventStartDate': newStartDate, 'eventEndDate': newEndDate}
+	          dictArray.append(dictall[i])
+    else:
+            form = UploadFormxl()
+    context = {'data': dictArray, 'form': form}
     return render(request, 'sportapp/uploadxl.html', context)
 
 

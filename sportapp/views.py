@@ -366,16 +366,39 @@ def uploadxl(request):
 	          eventName = sheet.cell(row=i+3,column=2).value
 	          eventStartDate = sheet.cell(row=i+3,column=3).value
 	          eventEndDate = sheet.cell(row=i+3,column=4).value
+		  eventLocation = sheet.cell(row=i+3,column=5).value
+		  eventMembers = sheet.cell(row=i+3,column=6).value
+		  eventPayment = sheet.cell(row=i+3,column=7).value
+		  eventAwards = sheet.cell(row=i+3,column=8).value
+		  eventPolygraph = sheet.cell(row=i+3,column=9).value
+		  eventMedic = sheet.cell(row=i+3,column=10).value
+		  eventAmbulance = sheet.cell(row=i+3,column=11).value
+		  eventCosts = sheet.cell(row=i+3,column=12).value
 	          newStartDate = date(2018, eventStartDate.month, eventStartDate.day)  
 	          if eventEndDate != None: 
 	             newEndDate = date(2018, eventEndDate.month, eventEndDate.day)
                   else:
 	             newEndDate = ''
-	          dictall[i] = {'eventName': eventName, 'eventStartDate': newStartDate, 'eventEndDate': newEndDate}
+		  eventSportName = sheet.cell(row=i+2,column=1).value
+	          dictall[i] = {'eventName': eventName, 'eventStartDate': newStartDate, 'eventEndDate': newEndDate, 'eventLocation': eventLocation, 'eventMembers': eventMembers, 'eventPayment': eventPayment, 'eventAwards': eventAwards, 'eventPolygraph': eventPolygraph, 'eventMedic': eventMedic, 'eventAmbulance': eventAmbulance, 'eventCosts': eventCosts}
 	          dictArray.append(dictall[i])
     else:
             form = UploadFormxl()
     context = {'data': dictArray, 'form': form}
     return render(request, 'sportapp/uploadxl.html', context)
 
+@permission_required('sportapp.change_tourney')
+def importxl(request):
+    data = {'tooo':[{'title':'test1', 'date_start':'13.10.2017'},{'title':'test2', 'date_start':'15.10.2017'}]}
+    if request.method == 'POST':
+        idata=request.POST.get('sdata')
+        data = json.loads(idata)
+        items = data['items']
+        for i in range(5,10):
+            tt = Tourney()
+            tt.title = items[str(i)]['eventName']
+            tt.save()
+    else:
+        pass
+    return JsonResponse({'accepted': True})
 

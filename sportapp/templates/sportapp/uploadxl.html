@@ -8,7 +8,6 @@
     {{ form.as_p }}
     <input type="submit" name="read" value="Распознать" />
     <br />
-
     <table border="1">
       <tr>
         <th>Мероприятие</th>
@@ -32,6 +31,7 @@
 {% block javascript %}
 
 <script>
+
     $( document ).ready(function() {
         console.log( "ready!" );
     });
@@ -52,10 +52,18 @@ $.ajaxSetup({
 });
 
     $("#id_import").click(function(e) {
-	alert('asd');
+      var arrEventName = [];
+      var dict = {};
+      var datax = {{ json_data|safe }};
+      str = JSON.stringify(datax);
+      obj = JSON.parse(str);
+      for (i = 1; i < obj.length; i++) {
+        arrEventName[i] = obj[i]["eventName"];
+        console.log(arrEventName[i]);
+      }
       $.ajax({
         url: '/sport/importxl/',
-        data: { sdata: JSON.stringify({{ data }})},
+        data: { sdata: str},
         dataType: 'json',
         method: 'POST',
         success: function (data) {

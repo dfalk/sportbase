@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^filter/$', views.list_view, {'year': dnow.year, 'month': dnow.month}, name='filter'),
     url(r'^sport_list', views.sport_list, name='sport_list'),
     url(r'^uploadxl', views.uploadxl, name='uploadxl'),
+    url(r'^importxl', views.importxl, name='importxl'),
 ]

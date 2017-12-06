@@ -57,10 +57,6 @@ $.ajaxSetup({
       var datax = {{ json_data|safe }};
       str = JSON.stringify(datax);
       obj = JSON.parse(str);
-      for (i = 1; i < obj.length; i++) {
-        arrEventName[i] = obj[i]["eventName"];
-        console.log(arrEventName[i]);
-      }
       $.ajax({
         url: '/sport/importxl/',
         data: { sdata: str},

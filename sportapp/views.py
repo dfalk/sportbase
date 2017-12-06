@@ -23,6 +23,7 @@ from openpyxl import load_workbook
 import calendar
 import json
 import json as simplejson
+import datetime
 
 
 def list_view(request, year=None, month=None, week=None, sport=None, only_start=True, typer='13'):
@@ -351,6 +352,12 @@ def import2018(request):
         pass
     return JsonResponse({'accepted': True})
 
+date_handler = lambda obj: (
+    obj.isoformat()
+    if isinstance(obj, (datetime.datetime, datetime.date))
+    else None
+)
+
 def uploadxl(request):
     dictArray = []
     dictall = {}
@@ -375,17 +382,17 @@ def uploadxl(request):
 		  eventMedic = sheet.cell(row=i+3,column=10).value
 		  eventAmbulance = sheet.cell(row=i+3,column=11).value
 		  eventCosts = sheet.cell(row=i+3,column=12).value
-	          newStartDate = date(2018, eventStartDate.month, eventStartDate.day)  
+	          newStartDate = date(2018, eventStartDate.month, eventStartDate.day)
 	          if eventEndDate != None: 
 	             newEndDate = date(2018, eventEndDate.month, eventEndDate.day)
                   else:
-	             newEndDate = ''
+	             newEndDate = None
 		  eventSportName = sheet.cell(row=i+2,column=1).value
-	          dictall[i] = {'eventName': eventName,  'eventLocation': eventLocation, 'eventMembers': eventMembers, 'eventPayment': eventPayment, 'eventAwards': eventAwards, 'eventPolygraph': eventPolygraph, 'eventMedic': eventMedic, 'eventAmbulance': eventAmbulance, 'eventCosts': eventCosts}
+	          dictall[i] = {'eventName': eventName, 'eventStartDate': newStartDate, 'eventEndDate': newEndDate, 'eventLocation': eventLocation, 'eventMembers': eventMembers, 'eventPayment': eventPayment, 'eventAwards': eventAwards, 'eventPolygraph': eventPolygraph, 'eventMedic': eventMedic, 'eventAmbulance': eventAmbulance, 'eventCosts': eventCosts}
 	          dictArray.append(dictall[i])
     else:
             form = UploadFormxl()
-    json_data = json.dumps(dictArray)
+    json_data = json.dumps(dictArray, default=date_handler)
     context = {'data': dictArray, 'form': form, 'json_data': json_data}
     return render(request, 'sportapp/uploadxl.html', context)
 
@@ -394,9 +401,15 @@ def importxl(request):
     if request.method == 'POST':
         idata=request.POST.get('sdata')
         data = json.loads(idata)
-        for i in range(1,10):
+        location = Location.objects.get(id=1)
+        sport = Sport.objects.get(id=1)
+        for i in range(1,len(data)):
             tt = Tourney()
             tt.title = data[i]['eventName']
+            tt.date_start = data[i]['eventStartDate']
+            tt.date_end = data[i]['eventEndDate']       
+	    tt.location = location
+            tt.sport = sport
             tt.save()
     else:
         pass

@@ -19,14 +19,13 @@
 {% block content %}
 
 <h1>Соревнования</h1>
-
-<!--
+{% if request.path == "/sport/filter/" %}
 <form action="" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Показать" />
 </form>
--->
+{% endif %}
 
 {% if weeks and not sport %}
 <b>Недели в этом месяце: </b>

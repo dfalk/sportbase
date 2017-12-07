@@ -23,7 +23,7 @@ from openpyxl import load_workbook
 import calendar
 import json
 import json as simplejson
-import datetime
+
 
 
 def list_view(request, year=None, month=None, week=None, sport=None, only_start=True, typer='13'):
@@ -354,7 +354,7 @@ def import2018(request):
 
 date_handler = lambda obj: (
     obj.isoformat()
-    if isinstance(obj, (datetime.datetime, datetime.date))
+    if isinstance(obj, (datetime, date))
     else None
 )
 

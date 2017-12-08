@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+
 {% block extra_head %}
 <style>
 .form-list { padding: 2px; border: 1px solid gray; margin-bottom: 10px; }
@@ -94,4 +95,20 @@
 {% endif %}
 {% endif %}
 
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+    $(function() {
+        $('#id_date_start').datepicker({ 
+          dateFormat: 'dd.mm.yy',
+          monthNames : ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+	  dayNamesMin : ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+        });
+	$('#id_date_end').datepicker({ 
+          dateFormat: 'dd.mm.yy',
+          monthNames : ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+	  dayNamesMin : ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+        }); 
+    });
+        </script> 
 {% endblock %}

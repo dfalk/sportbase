@@ -62,10 +62,11 @@ class LocForm(ModelForm):
 class FilterForm(forms.Form):
       date_start = forms.DateField(label="Начало")
       date_end = forms.DateField(label="Конец")
-      sport = forms.ModelChoiceField(queryset=Sport.objects.all(), required=False)
+      sport = forms.ModelChoiceField(queryset=Sport.objects.all(), required=False, label="Вид спорта")
       choice = (('13', 'Республиканские'),
                 ('1', 'Минспорт'),
                 ('2', 'Выезд'),
 	        ('3', 'Другое'))
+      location = forms.ModelChoiceField(queryset=Location.objects.all(), required=False)
       typer = forms.ChoiceField(choices=choice,label="Организация")
       only_start = forms.BooleanField(required=False, label="Только начало")

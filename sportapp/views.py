@@ -26,7 +26,7 @@ import json as simplejson
 
 
 
-def list_view(request, year=None, month=None, week=None, sport=None, only_start=True, typer='13'):
+def list_view(request, year=None, month=None, week=None, sport=None, only_start=True, typer='13', location=None):
     weeks = []
     dnow = datetime.now()
     current_week = dnow.isocalendar()[1]
@@ -68,6 +68,7 @@ def list_view(request, year=None, month=None, week=None, sport=None, only_start=
 	    typer = form.cleaned_data['typer']
             sport = form.cleaned_data['sport']
 	    only_start = form.cleaned_data['only_start']
+            location = form.cleaned_data['location']
             custom_query = True
     else:
         init_data={'date_start': date_start, 'date_end': date_end, 'only_start': True}
@@ -91,6 +92,13 @@ def list_view(request, year=None, month=None, week=None, sport=None, only_start=
         ).filter(tfilt)
     if sport:
         tourney_list = tourney_list.filter(sport=sport)
+    if location:
+	tourney_list = tourney_list.filter(
+            (Q(location=location)) |
+	    (Q(location2=location)) |
+     	    (Q(location3=location)) |
+            (Q(location4=location)))
+    
 
     judje_sum = tourney_list.aggregate(
          Sum('judje_sum'),

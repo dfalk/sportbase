@@ -415,8 +415,15 @@ def importxl(request):
             tt = Tourney()
             tt.title = data[i]['eventName']
             tt.date_start = data[i]['eventStartDate']
-            tt.date_end = data[i]['eventEndDate']       
+            tt.date_end = data[i]['eventEndDate']  
+            tt.print_sum = data[i]['eventPolygraph']
+	    tt.medic_sum = data[i]['eventMedic']
+            tt.reward_sun = data[i]['eventAwards']
+            tt.participants = data[i]['eventMembers']
+            tt.ambulance_sum = data[i]['eventAmbulance']
+            tt.other_sum = data[i]['eventPayment']
 	    tt.location = location
+            tt.judje_sum = data[i]['eventCosts']
             tt.sport = sport
             tt.save()
     else:

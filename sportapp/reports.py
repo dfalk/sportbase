@@ -174,3 +174,47 @@ def export_min(tourney_list,date_start,date_end):
     response['Content-Disposition'] = 'attachment; filename=' + docx_title
     response['Content-Length'] = length
     return response
+
+def export_media(tourney_list,date_start,date_end):
+    file_name = "sportapp/reports/05-media.docx"
+    doc1 = Document(file_name)
+    str_date_n = unicode(localize(date_start)).split(" ")
+    t = doc1.paragraphs[2].text = ((str_date_n[0]) + ' - ' + (unicode(localize(date_end))))
+    i=1
+    for tourney in tourney_list:
+        row1 = doc1.tables[0].add_row()
+        str_date = unicode(localize(tourney.date_start)).split(" ")
+        row1.cells[0].paragraphs[0].text = "1";
+        run11 = row1.cells[1].paragraphs[0].add_run(str_date[0] + " " + str_date[1])
+        run11.bold = True
+        row1.cells[1].paragraphs[0].alignment = align.CENTER
+	row1.cells[2].paragraphs[0].text = tourney.title   
+        row1.cells[3].paragraphs[0].text = " "
+	row1.cells[4].paragraphs[0].add_run(unicode(tourney.resp_zam))
+        if tourney.date_end and tourney.date_end != tourney.date_start:
+            end_date = unicode(localize(tourney.date_end)).split(" ")
+            p11b = row1.cells[1].add_paragraph()
+            p11b.alignment = align.CENTER
+            run11b = p11b.add_run("-" + end_date[0] + " " + end_date[1])
+            run11b.bold = True
+    for row in doc1.tables[0].rows:
+        for cell in row.cells:
+            paragraphs = cell.paragraphs
+            for paragraph in paragraphs:
+                for run in paragraph.runs:
+                    font = run.font
+                    font.size= Pt(12)    
+                    font.name = 'Times New Roman'
+
+    f = StringIO()
+    docx_title = "media_" + str(99) + ".docx"
+    doc1.save(f)
+    length = f.tell()
+    f.seek(0)
+    response = HttpResponse(
+        f.getvalue(),
+        content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    )
+    response['Content-Disposition'] = 'attachment; filename=' + docx_title
+    response['Content-Length'] = length
+    return response

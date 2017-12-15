@@ -180,11 +180,11 @@ def export_media(tourney_list,date_start,date_end):
     doc1 = Document(file_name)
     str_date_n = unicode(localize(date_start)).split(" ")
     t = doc1.paragraphs[2].text = ((str_date_n[0]) + ' - ' + (unicode(localize(date_end))))
-    i=1
+    i=0
     for tourney in tourney_list:
         row1 = doc1.tables[0].add_row()
         str_date = unicode(localize(tourney.date_start)).split(" ")
-        row1.cells[0].paragraphs[0].text = "1";
+        row1.cells[0].paragraphs[0].text = "N";
         run11 = row1.cells[1].paragraphs[0].add_run(str_date[0] + " " + str_date[1])
         run11.bold = True
         row1.cells[1].paragraphs[0].alignment = align.CENTER

@@ -190,7 +190,8 @@ def export_media(tourney_list,date_start,date_end):
         row1.cells[1].paragraphs[0].alignment = align.CENTER
 	row1.cells[2].paragraphs[0].text = tourney.title   
         row1.cells[3].paragraphs[0].text = " "
-	row1.cells[4].paragraphs[0].add_run(unicode(tourney.resp_zam))
+        if tourney.resp_zam != None:
+           row1.cells[4].paragraphs[0].add_run(unicode(tourney.resp_zam))
         if tourney.date_end and tourney.date_end != tourney.date_start:
             end_date = unicode(localize(tourney.date_end)).split(" ")
             p11b = row1.cells[1].add_paragraph()

@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import permission_required
 from .models import Tourney, Sport, Location
 from .forms import UploadForm, TourneyFormSet, TourneyForm, UploadFormxl
 from .forms import LocForm, FilterForm, ImportFormSet
-from .reports import export_gov, export_vfd, export_min, export_media, export_plan
+from .reports import export_gov, export_vfd, export_min, export_media
 from .utils import week_start_date
 from datetime import datetime, date, timedelta
 from django.utils import formats
@@ -121,8 +121,6 @@ def list_view(request, year=None, month=None, week=None, sport=None, only_start=
         return export_min(tourney_list, date_start, date_end)
     if request.GET.get('file', '') == 'media':
         return export_media(tourney_list, date_start, date_end)
-    if request.GET.get('file', '') == 'plan':
-        return export_plan(tourney_list, date_start, date_end)
     # /end export block
     context = {'tourney_list': tourney_list,
                'date_start': date_start,

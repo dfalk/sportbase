@@ -180,20 +180,17 @@ def export_media(tourney_list,date_start,date_end):
     doc1 = Document(file_name)
     str_date_n = unicode(localize(date_start)).split(" ")
     t = doc1.paragraphs[2].text = ((str_date_n[0]) + ' - ' + (unicode(localize(date_end))))
-    i=0
+    i=1
     for tourney in tourney_list:
-        i = i+1
         row1 = doc1.tables[0].add_row()
         str_date = unicode(localize(tourney.date_start)).split(" ")
-        row1.cells[0].paragraphs[0].text = str(i);
+        row1.cells[0].paragraphs[0].text = "1";
         run11 = row1.cells[1].paragraphs[0].add_run(str_date[0] + " " + str_date[1])
         run11.bold = True
         row1.cells[1].paragraphs[0].alignment = align.CENTER
 	row1.cells[2].paragraphs[0].text = tourney.title   
         row1.cells[3].paragraphs[0].text = " "
-	row1.cells[4].paragraphs[0].alignment = align.CENTER
-        if tourney.resp_zam != None:
-           row1.cells[4].paragraphs[0].add_run(unicode(tourney.resp_zam))
+	row1.cells[4].paragraphs[0].add_run(unicode(tourney.resp_zam))
         if tourney.date_end and tourney.date_end != tourney.date_start:
             end_date = unicode(localize(tourney.date_end)).split(" ")
             p11b = row1.cells[1].add_paragraph()
@@ -211,35 +208,6 @@ def export_media(tourney_list,date_start,date_end):
 
     f = StringIO()
     docx_title = "media_" + str(99) + ".docx"
-    doc1.save(f)
-    length = f.tell()
-    f.seek(0)
-    response = HttpResponse(
-        f.getvalue(),
-        content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    )
-    response['Content-Disposition'] = 'attachment; filename=' + docx_title
-    response['Content-Length'] = length
-    return response
-
-def export_plan(tourney_list,date_start,date_end):
-    file_name = "sportapp/reports/06-plan.docx"
-    doc1 = Document(file_name)
-    str_date_n = unicode(localize(date_start)).split(" ")
-    t = doc1.paragraphs[2].text = ((str_date_n[0]) + ' - ' + (unicode(localize(date_end))))
-    for tourney in tourney_list:  
-        row1 = doc1.tables[1].add_row()
-        str_date = unicode(localize(tourney.date_start)).split(" ")
-        
-    for row in doc1.tables[1].rows:
-        for cell in row.cells:
-            paragraphs = cell.paragraphs
-            for paragraph in paragraphs:
-                for run in paragraph.runs:
-                    font = run.font
-                    font.size= Pt(12)
-    f = StringIO()
-    docx_title = "plan_" + str(99) + ".docx"
     doc1.save(f)
     length = f.tell()
     f.seek(0)

@@ -58,7 +58,7 @@
 </table>
 
 
-{% if request.user.username == 'uso' %}
+{% if request.user.username == 'uso' or request.user.username == 'admin' %}
 <table>
 <tr><td>Судейские</td><td>{{ judje_sum.judje_sum__sum }}</td></tr>
 <tr><td>Наградная</td><td>{{ judje_sum.reward_sum__sum }}</td></tr>
@@ -69,6 +69,7 @@
 <tr><td>Взнос</td><td>{{ judje_sum.vznos_sum__sum }}</td></tr>
 <tr><td>Аренда</td><td>{{ judje_sum.arenda_sum__sum }}</td></tr>
 <tr><td>Медики</td><td>{{ judje_sum.medic_sum__sum }}</td></tr>
+<tr><td>Скорая</td><td>{{ judje_sum.ambulance_sum__sum }}</td></tr>
 <tr><td>Транспорт</td><td>{{ judje_sum.transport_sum__sum }}</td></tr>
 </table>
 {% endif %}

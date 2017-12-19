@@ -110,6 +110,7 @@ def list_view(request, year=None, month=None, week=None, sport=None, only_start=
          Sum('vznos_sum'),
          Sum('arenda_sum'),
          Sum('medic_sum'),
+         Sum('ambulance_sum'),
          Sum('transport_sum')
          )
     # export block
@@ -389,15 +390,22 @@ def uploadxl(request):
 		  eventPolygraph = sheet.cell(row=i+3,column=9).value
 		  eventMedic = sheet.cell(row=i+3,column=10).value
 		  eventAmbulance = sheet.cell(row=i+3,column=11).value
-		  eventCosts = sheet.cell(row=i+3,column=12).value
-	          newStartDate = date(2018, eventStartDate.month, eventStartDate.day)
+		  eventSport = sheet.cell(row=i+3,column=13).value
+                  try:
+                      sp = Sport.objects.get(title=eventSport.strip())
+		      eventSportId = sp.id
+                  except Sport.DoesNotExist:
+                      sp = None
+                      eventSportId = None
 	          if eventEndDate != None: 
 	             newEndDate = date(2018, eventEndDate.month, eventEndDate.day)
                   else:
 	             newEndDate = None
 		  eventSportName = sheet.cell(row=i+2,column=1).value
-	          dictall[i] = {'eventName': eventName, 'eventStartDate': newStartDate, 'eventEndDate': newEndDate, 'eventLocation': eventLocation, 'eventMembers': eventMembers, 'eventPayment': eventPayment, 'eventAwards': eventAwards, 'eventPolygraph': eventPolygraph, 'eventMedic': eventMedic, 'eventAmbulance': eventAmbulance, 'eventCosts': eventCosts}
-	          dictArray.append(dictall[i])
+                  if eventStartDate:
+	              newStartDate = date(2018, eventStartDate.month, eventStartDate.day)
+                      dictall[i] = {'eventName': eventName, 'eventStartDate': newStartDate, 'eventEndDate': newEndDate, 'eventLocation': eventLocation, 'eventMembers': eventMembers, 'eventPayment': eventPayment, 'eventAwards': eventAwards, 'eventPolygraph': eventPolygraph, 'eventMedic': eventMedic, 'eventAmbulance': eventAmbulance, 'eventSport': eventSport, 'eventSportId': eventSportId}
+	              dictArray.append(dictall[i])
     else:
             form = UploadFormxl()
     json_data = json.dumps(dictArray, default=date_handler)
@@ -411,20 +419,37 @@ def importxl(request):
         data = json.loads(idata)
         location = Location.objects.get(id=1)
         sport = Sport.objects.get(id=1)
-        for i in range(1,len(data)):
+        for i in range(0,len(data)):
             tt = Tourney()
             tt.title = data[i]['eventName']
             tt.date_start = data[i]['eventStartDate']
             tt.date_end = data[i]['eventEndDate']  
-            tt.print_sum = data[i]['eventPolygraph']
-	    tt.medic_sum = data[i]['eventMedic']
-            tt.reward_sun = data[i]['eventAwards']
-            tt.participants = data[i]['eventMembers']
-            tt.ambulance_sum = data[i]['eventAmbulance']
-            tt.other_sum = data[i]['eventPayment']
-	    tt.location = location
-            tt.judje_sum = data[i]['eventCosts']
-            tt.sport = sport
+            if data[i]['eventPolygraph']:
+                tt.print_sum = data[i]['eventPolygraph']
+            if data[i]['eventMedic']:
+                tt.medic_sum = data[i]['eventMedic']
+            if data[i]['eventAwards']:
+                tt.reward_sum = data[i]['eventAwards']
+            if data[i]['eventMembers']:
+                tt.participants = data[i]['eventMembers']
+            if data[i]['eventAmbulance']:
+                tt.ambulance_sum = data[i]['eventAmbulance']
+            if data[i]['eventPayment']:
+                tt.judje_sum = data[i]['eventPayment']
+            loc_title = data[i]['eventLocation']
+            try:
+                loc = Location.objects.get(title=loc_title)
+            except Location.DoesNotExist:
+                loc = Location.objects.get(id=1)
+            tt.location = loc
+            sport_title = data[i]['eventSport']
+            try:
+                sp = Sport.objects.get(title=sport_title)
+            except Sport.DoesNotExist:
+                sp = Sport.objects.get(id=1)
+            tt.sport = sp
+            #tt.other_sum = data[i]['eventPayment']
+	    #tt.location = location
             tt.save()
     else:
         pass
